@@ -1,0 +1,8 @@
+[server]
+endpoint="0.0.0.0:9091"
+#mysql_url="root:q6gqntPI4nYnwKPh@tcp(47.100.21.147:3306)/xiaoshi"
+aes_key="aataiduxiaoshiaa"
+token_ttl=7200
+#redirect_url="http://127.0.0.1:8080/#/overview" 
+#client_config_files="./cakeyconfig/config0.toml,./cakeyconfig/config1.toml,./cakeyconfig/config2.toml,./cakeyconfig/config3.toml"
+mongo_uri="mongodb://invoice_test:123456@124.223.207.148:27017/invoice"
