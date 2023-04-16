@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"strconv"
 )
 
 // Webase请求配置
@@ -32,30 +33,30 @@ type WeBase struct {
 	Host string
 }
 
-func InitWeBaseInstance(weBaseHost string) (WeBase, error) {
-	weBase := WeBase{Host: weBaseHost}
+func InitWeBaseInstance(weBaseHost string) (*WeBase, error) {
+	weBase := &WeBase{Host: weBaseHost}
 	_, err := weBase.GetVersion()
 	if err != nil {
-		return WeBase{}, errors.New("Init WeBaseInstance Failed")
+		return &WeBase{}, errors.New("Init WeBaseInstance Failed")
 	}
 	return weBase, nil
 }
 
 // GetNewUser 新增WeBase-Sign用户
 func (ws *WeBase) GetNewUser(studentID string) error {
-	type Register struct {
+	type options struct {
 		signUserId       string
 		appId            string
 		encryptType      int
 		returnPrivateKey bool
 	}
-	wsAccount := &Register{
+	opt := &options{
 		signUserId:       studentID,
 		appId:            AppId,
 		encryptType:      EncryptType,
 		returnPrivateKey: ReturnPrivateKey, // 默认false
 	}
-	body, _ := query.Values(wsAccount)
+	body, _ := query.Values(opt)
 	wsUrl, _ := url.Parse(ws.Host + GetNewUserPath)
 	wsUrl.RawQuery = body.Encode()
 	resp, err := http.Get(wsUrl.String())
@@ -76,12 +77,26 @@ func (ws *WeBase) PostNewUser(studentID string, privateKey string) {
 
 }
 
-func (ws *WeBase) GetUserInfo(studentID string) {
-	wsUrl := ws.Host + regexp.MustCompile("{.*?}").ReplaceAllString(GetUserInfoPath, studentID)
-	fmt.Println(wsUrl)
+// GetUserInfo 查询用户信息 TODO: 身份验证
+func (ws *WeBase) GetUserInfo(studentID string, returnPK bool) error {
+	wsUrl, _ := url.Parse(ws.Host + regexp.MustCompile("{.*?}").ReplaceAllString(GetUserInfoPath, studentID))
+	q := wsUrl.Query()
+	q.Set("returnPrivateKey", strconv.FormatBool(returnPK))
+	wsUrl.RawQuery = q.Encode()
+	resp, err := http.Get(wsUrl.String())
+	if err != nil {
+		return err
+	}
+	respBody, _ := ioutil.ReadAll(resp.Body)
+	var respInfo map[string]interface{}
+	json.Unmarshal(respBody, &respInfo)
 
+	// TODO: 处理返回信息
+	fmt.Println(respInfo)
+	return nil
 }
 
+// DeleteUser 注销用户（未删除）
 func (ws *WeBase) DeleteUser(studentID string) (bool, error) {
 	wsUrl := ws.Host + DeleteUserPath
 	data, err := json.Marshal(map[string]interface{}{"signUserId": studentID})
@@ -149,5 +164,5 @@ func main() {
 	//}
 
 	// 3. 测试查看用户
-	webase.GetUserInfo("102312346")
+	webase.GetUserInfo("20177830226", false)
 }
