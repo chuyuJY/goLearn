@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+package pb;
+
+// 导入google/api/annotations.proto
+import "pb/google/api/annotations.proto";
+
+// 定义消息
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string reply = 1;
+}
+
+message EchoRequest {
+  string Message = 1;
+}
+
+message EchoResponse {
+  string Message = 1;
+}
+
+// 定义服务
+service Greeter {
+  // SayHello
+  rpc SayHello (HelloRequest) returns (HelloResponse) {
+    // 这里添加了google.api.http注释
+    option (google.api.http) = {
+      post: "/v1/greeter/sayhello",
+      body: "*",
+    };
+  }
+  // 服务端单向流
+  rpc LotsOfHello (HelloRequest) returns (stream HelloResponse) {}
+  // 客户端单向流
+  rpc LotsOfName (stream HelloRequest) returns (HelloResponse) {}
+  // 双向流
+  rpc BidiHello (stream HelloRequest) returns (stream HelloResponse) {}
+  // 普通RPC调用metadata
+  rpc UnarySayHello (HelloRequest) returns (HelloResponse) {}
+  // 双向流式RPC调用metadata
+  rpc BidirectionalStreaming (stream HelloRequest) returns (stream HelloResponse) {}
+
+  // 一元RPC echo
+  rpc UnaryEcho (EchoRequest) returns (EchoResponse) {}
+}
