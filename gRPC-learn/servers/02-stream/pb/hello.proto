@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "./pb;pb";
+
+package pb;
+
+// 定义消息
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string reply = 1;
+}
+
+service Greeter {
+  // 服务端单向流
+  rpc LotsOfHello (HelloRequest) returns (stream HelloResponse) {}
+  // 客户端单向流
+  rpc LotsOfName (stream HelloRequest) returns (HelloResponse) {}
+  // 双向流
+  rpc BidiHello (stream HelloRequest) returns (stream HelloResponse) {}
+}

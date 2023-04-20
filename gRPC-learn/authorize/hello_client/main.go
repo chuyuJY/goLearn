@@ -200,14 +200,16 @@ func bidirectionalWithMetadata(c pb2.GreeterClient, names []string) {
 	)
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	var header, trailer metadata.MD
-	// 使用带有metadata的context执行RPC调用.
+	// 1. 使用带有metadata的context执行RPC调用.
+	// 此处是调用远程 RPC，获取 Stream
 	stream, err := c.BidirectionalStreaming(ctx)
 	if err != nil {
 		log.Fatalln("failed to call BidirectionalStreaming: %v\n", err)
 	}
 
+	// 发送
 	go func() {
-		// 1. 读取header
+		// 2. 读取header
 		header, err = stream.Header()
 		if err != nil {
 			log.Fatalln("failed to get header from stream: %v", err)
@@ -219,7 +221,7 @@ func bidirectionalWithMetadata(c pb2.GreeterClient, names []string) {
 			return
 		}
 
-		// 2. 发送请求数据到server
+		// 3. 发送请求数据到server
 		for _, name := range names {
 			time.Sleep(time.Second)
 			if err := stream.Send(&pb2.HelloRequest{Name: name}); err != nil {
@@ -229,7 +231,7 @@ func bidirectionalWithMetadata(c pb2.GreeterClient, names []string) {
 		stream.CloseSend()
 	}()
 
-	// 3. 接收所有的响应
+	// 4. 接收所有的响应
 	var rpcStatus error
 	for {
 		reply, err := stream.Recv()
@@ -244,7 +246,7 @@ func bidirectionalWithMetadata(c pb2.GreeterClient, names []string) {
 		return
 	}
 
-	// 3. RPC调用结束，获取trailer
+	// 5. RPC调用结束，获取trailer
 	trailer = stream.Trailer()
 	if t, ok := trailer["timestamp"]; ok {
 		fmt.Printf("timestamp from trailer: %s\n", t)
