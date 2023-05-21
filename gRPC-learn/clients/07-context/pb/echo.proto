@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "./pb;pb";
+
+package pb;
+
+// 定义消息
+message EchoRequest {
+  string Message = 1;
+}
+
+message EchoResponse {
+  string Message = 1;
+}
+
+service Greeter {
+  rpc UnaryEcho (EchoRequest) returns (EchoResponse) {}
+}

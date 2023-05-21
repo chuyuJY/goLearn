@@ -11,14 +11,14 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/goccy/go-json v0.9.10
 	github.com/golang-jwt/jwt/v4 v4.4.2
-	github.com/google/go-querystring v1.1.0
 	github.com/influxdata/toml v0.0.0-20180607005434-2a2e3012f7cf
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/swaggo/gin-swagger v1.5.2
 	github.com/swaggo/swag v1.8.4
 	go.etcd.io/etcd/client/v3 v3.5.5
 	go.mongodb.org/mongo-driver v1.10.0
-	golang.org/x/sync v0.0.0-20220923202941-7f9b1623fab7
+	golang.org/x/sync v0.1.0
+	google.golang.org/genproto v0.0.0-20230223222841-637eb2293923
 )
 
 require (
@@ -77,7 +77,6 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
-	google.golang.org/genproto v0.0.0-20230223222841-637eb2293923 // indirect
 	google.golang.org/grpc v1.53.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
