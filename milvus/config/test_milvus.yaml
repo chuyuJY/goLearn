@@ -1,0 +1,26 @@
+# Related configuration of MinIO/S3/GCS or any other service supports S3 API, which is responsible for data persistence for Milvus.
+# We refer to the storage service as MinIO/S3 in the following description for simplicity.
+minio:
+  address: localhost # Address of MinIO/S3
+  port: 9000   # Port of MinIO/S3
+  accessKeyID: XlHwS3DRQXqBXjiCzO91 # accessKeyID of MinIO/S3
+  secretAccessKey: KBY835ks1BOFf6gMM80CQRdFlVoJWLYH6KN2Ho8l # MinIO/S3 encryption string
+  useSSL: false # Access to MinIO/S3 with SSL
+  bucketName: "hello" # Bucket name in MinIO/S3
+  rootPath: / # The root path where the message is stored in MinIO/S3
+  # Whether to use IAM role to access S3/GCS instead of access/secret keys
+  # For more infomation, refer to
+  # aws: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html
+  # gcp: https://cloud.google.com/storage/docs/access-control/iam
+  # aliyun (ack): https://www.alibabacloud.com/help/en/container-service-for-kubernetes/latest/use-rrsa-to-enforce-access-control
+  # aliyun (ecs): https://www.alibabacloud.com/help/en/elastic-compute-service/latest/attach-an-instance-ram-role
+  useIAM: false
+  # Cloud Provider of S3. Supports: "aws", "gcp", "aliyun".
+  # You can use "aws" for other cloud provider supports S3 API with signature v4, e.g.: minio
+  # You can use "gcp" for other cloud provider supports S3 API with signature v2
+  # You can use "aliyun" for other cloud provider uses virtual host style bucket
+  # When useIAM enabled, only "aws", "gcp", "aliyun" is supported for now
+  cloudProvider: aws
+  # Custom endpoint for fetch IAM role credentials. when useIAM is true & cloudProvider is "aws".
+  # Leave it empty if you want to use AWS default endpoint
+  iamEndpoint: ""
