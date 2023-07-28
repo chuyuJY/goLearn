@@ -9,9 +9,11 @@ import (
 
 var (
 	endpoint        = "localhost:9000"
-	accessKeyID     = "XlHwS3DRQXqBXjiCzO91"
-	secretAccessKey = "KBY835ks1BOFf6gMM80CQRdFlVoJWLYH6KN2Ho8l"
-	useSSL          = false
+	accessKeyID     = "minioadmin"
+	secretAccessKey = "minioadmin"
+	region          = "cn-north-1"
+	bucketName      = "milvus-bucket"
+	objectName      = "Who-is-Rhizome.json"
 )
 
 var minioClient *minio.Client
@@ -20,7 +22,7 @@ func init() {
 	var err error
 	minioClient, err = minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
-		Secure: useSSL,
+		Region: region,
 	})
 	if err != nil {
 		log.Fatalln(err)
